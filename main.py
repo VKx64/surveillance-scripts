@@ -1,7 +1,13 @@
+from flask import Flask, jsonify
 import pyautogui
 import datetime
 import os
 from helper_functions import *
+
+app = Flask(__name__)
+
+def create_required_folders():
+    os.makedirs("contents/screenshots", exist_ok=True) 
 
 def generate_file_name():
     now = datetime.datetime.now()
@@ -17,8 +23,14 @@ def take_screenshot():
     except Exception as e:
         print(f"An error occurred while taking the screenshot: {e}")
         return None
-
-if __name__ == "__main__":
-    os.makedirs("contents/screenshots", exist_ok=True) 
+    
+@app.route('/screenshot', methods=['GET'])
+def screenshot_endpoint():
     file_name = take_screenshot()
-    send_image_to_discord(file_name)
+    if file_name:
+        return jsonify({"message": "Screenshot taken successfully", "file_path": file_name}), 200
+    else:
+        return jsonify({"message": "An error occurred while taking the screenshot"}), 500
+    
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
