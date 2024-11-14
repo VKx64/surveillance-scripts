@@ -1,11 +1,6 @@
-# PowerShell script to activate a virtual environment and run a Python script
+# Define paths to the Python interpreter and script
+$pythonPath = "D:\Tools\surveillance-scripts\venv\Scripts\python.exe"
+$scriptPath = "D:\Tools\surveillance-scripts\screenshot.py"
 
-# Set paths
-$venvPath = "D:\Tools\surveillance-scripts\venv"  # Path to your virtual environment folder
-$scriptPath = "D:\Tools\surveillance-scripts\screenshot.py"  # Path to the Python script you want to run
-
-# Activate the virtual environment
-& "$venvPath\Scripts\Activate.ps1"
-
-# Run the Python script
-python $scriptPath
+# Start the Python script as a new background process
+Start-Process -FilePath $pythonPath -ArgumentList $scriptPath -NoNewWindow -WindowStyle Hidden
